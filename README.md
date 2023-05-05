@@ -1,65 +1,84 @@
-# Qwik City App ⚡️
+npm install ts-node -D
 
-- [Qwik Docs](https://qwik.builder.io/)
-- [Discord](https://qwik.builder.io/chat)
-- [Qwik GitHub](https://github.com/BuilderIO/qwik)
-- [@QwikDev](https://twitter.com/QwikDev)
-- [Vite](https://vitejs.dev/)
+package.json:
+"scripts": {
+    "build": "qwik build",
+    "build.client": "vite build",
+    "build.preview": "vite build --ssr src/entry.preview.tsx",
+    "build.types": "tsc --incremental --noEmit",
+    "deploy": "echo 'Run \"npm run qwik add\" to install a server adapter'",
+    "dev": "vite --mode ssr",
+    "dev.debug": "node --inspect-brk ./node_modules/vite/bin/vite.js --mode ssr --force",
+    "fmt": "prettier --write .",
+    "fmt.check": "prettier --check .",
+    "lint": "eslint \"src/**/*.ts*\"",
+    "postinstall": "prisma generate",
+    "preview": "qwik build preview && vite preview --open",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev",
+    "prisma:migrate:prod": "prisma migrate deploy",
+    "start": "vite --open --mode ssr",
+    "qwik": "qwik"
+  },
+  "prisma": {
+    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
+  },
 
----
+D:\myProj\React\qwik-voting> npx prisma migrate dev
+Environment variables loaded from .env
+Prisma schema loaded from prisma\schema.prisma
+Datasource "db": SQLite database "dev.db" at "file:./dev.db"
 
-## Project Structure
+SQLite database dev.db created at file:./dev.db
 
-This project is using Qwik with [QwikCity](https://qwik.builder.io/qwikcity/overview/). QwikCity is just an extra set of tools on top of Qwik to make it easier to build a full site, including directory-based routing, layouts, and more.
+√ Enter a name for the new migration: ... init
+Applying migration `20230504023946_init`
 
-Inside your project, you'll see the following directory structure:
+The following migration(s) have been created and applied from new schema changes:
 
+migrations/
+  └─ 20230504023946_init/
+    └─ migration.sql
+
+Your database is now in sync with your schema.
+
+✔ Generated Prisma Client (4.13.0 | library) to .\node_modules\@prisma\client in 109ms
+
+
+PS D:\myProj\React\qwik-voting> npx prisma generate
+Environment variables loaded from .env
+Prisma schema loaded from prisma\schema.prisma
+
+✔ Generated Prisma Client (4.13.0 | library) to .\node_modules\@prisma\client in 68ms
+You can now start using Prisma Client in your code. Reference: https://pris.ly/d/client
 ```
-├── public/
-│   └── ...
-└── src/
-    ├── components/
-    │   └── ...
-    └── routes/
-        └── ...
+import { PrismaClient } from '@prisma/client'
+const prisma = new PrismaClient()
 ```
+PS D:\myProj\React\qwik-voting> npx prisma studio
+Environment variables loaded from .env
+Prisma schema loaded from prisma\schema.prisma
+Prisma Studio is up on http://localhost:5555
 
-- `src/routes`: Provides the directory based routing, which can include a hierarchy of `layout.tsx` layout files, and an `index.tsx` file as the page. Additionally, `index.ts` files are endpoints. Please see the [routing docs](https://qwik.builder.io/qwikcity/routing/overview/) for more info.
+npx prisma migrate reset
+Environment variables loaded from .env
+Prisma schema loaded from prisma\schema.prisma
+Datasource "db": SQLite database "dev.db" at "file:./dev.db"
 
-- `src/components`: Recommended directory for components.
+√ Are you sure you want to reset your database? All data will be lost. ... yes
 
-- `public`: Any static assets, like images, can be placed in the public directory. Please see the [Vite public directory](https://vitejs.dev/guide/assets.html#the-public-directory) for more info.
+Applying migration `20230504023946_init`
 
-## Add Integrations and deployment
+Database reset successful
 
-Use the `npm run qwik add` command to add additional integrations. Some examples of integrations include: Cloudflare, Netlify or Express server, and the [Static Site Generator (SSG)](https://qwik.builder.io/qwikcity/guides/static-site-generation/).
+The following migration(s) have been applied:
 
-```shell
-npm run qwik add # or `yarn qwik add`
-```
+migrations/
+  └─ 20230504023946_init/
+    └─ migration.sql
 
-## Development
+✔ Generated Prisma Client (4.13.0 | library) to .\node_modules\@prisma\client in 66ms
 
-Development mode uses [Vite's development server](https://vitejs.dev/). During development, the `dev` command will server-side render (SSR) the output.
+Running seed command `ts-node --compiler-options {"module":"CommonJS"} prisma/seed.ts` ...
 
-```shell
-npm start # or `yarn start`
-```
-
-> Note: during dev mode, Vite may request a significant number of `.js` files. This does not represent a Qwik production build.
-
-## Preview
-
-The preview command will create a production build of the client modules, a production build of `src/entry.preview.tsx`, and run a local server. The preview server is only for convenience to locally preview a production build, and it should not be used as a production server.
-
-```shell
-npm run preview # or `yarn preview`
-```
-
-## Production
-
-The production build will generate client and server modules by running both client and server build commands. Additionally, the build command will use Typescript to run a type check on the source code.
-
-```shell
-npm run build # or `yarn build`
-```
+The seed command has been executed.
